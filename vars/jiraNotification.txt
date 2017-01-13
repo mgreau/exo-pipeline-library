@@ -1,0 +1,3 @@
+<strong>Notify JIRA with Build status and informations.</strong>
+
+<p>The JIRA Plugin must be installed.</p>

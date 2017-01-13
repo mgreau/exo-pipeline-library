@@ -1,0 +1,30 @@
+This will execute a Sonar Analysis 
+
+<pre>
+node('docker'){
+    exoSonar {
+        dockerImage = 'exoplatform/ci:jdk8-maven32'
+        gitUrl = 'git@github.com:exodev/platform-ui.git'
+        gitBranch = 'develop'
+    }
+}
+</pre>
+
+If you have configured the <strong>EnvInject Plugin</strong> (https://wiki.jenkins-ci.org/display/JENKINS/EnvInject+Plugin), then you can define those values at environment variables
+in the job configuration:
+<pre>
+Properties Content
+---
+gitUrl=git@github.com:exodev/platform-ui.git
+gitBranch=develop
+dockerImage=exoplatform/ci:jdk8-maven32
+</pre>
+
+And then just do the following in your Jenkinsfile:
+
+<pre>
+node('docker'){
+    // do the sonar Analysis and Report to sonar.exoplatform.org
+    exoSonar { }
+}
+</pre>
