@@ -32,10 +32,6 @@ def call(body) {
     def eXoAndroid = docker.image(DOCKER_IMAGE);
     def pipelineError = null
 
-    stage(DOCKER_IMAGE){
-      eXoAndroid.pull()
-    }
-
     stage('Checkout ' + GIT_BRANCH){
       // checkout scm with credentials
       git branch: GIT_BRANCH, credentialsId: GIT_CREDENTIALS_ID, url: GIT_URL
