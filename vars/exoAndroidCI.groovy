@@ -15,7 +15,6 @@ def call(body) {
     def M2_REPO_IN_CONTAINER = utils.getValue('m2RepositoryPath', '/home/ciagent/.m2/repository', config, env)
     def JOB_SUFFIX = utils.getValue('jobSuffix', 'ci', config, env)
     def GRADLE_GOALS = utils.getValue('gradleTask', 'clean test assemble', config, env)
-    def GRADLE_PROFILES = utils.getValue('gradleProfiles', 'exo-release', config, env)
     def MAVEN_SETTINGS_FILE_ID = utils.getValue('m2SettingsId', 'exo-ci-maven-settings', config, env)
     def GIT_CREDENTIALS_ID = utils.getValue('gitCredentialsId', 'ciagent', config, env)
     def DOCKER_RUN_PARAMS = utils.getValue('dockerRunParams', '', config, env)
@@ -45,7 +44,7 @@ def call(body) {
                   [configFile(fileId: "${MAVEN_SETTINGS_FILE_ID}",  targetLocation: 'settings.xml')]) {
         try {
           eXoAndroid.inside("${DOCKER_RUN_PARAMS} -v ${m2Cache}:${M2_REPO_IN_CONTAINER}") {
-            sh "gradle --profile=${GRADLE_PROFILES} ${GRADLE_GOALS}"
+            sh "gradle ${GRADLE_GOALS}"
           }
         } catch (error) {
           currentBuild.result = 'FAILURE'
