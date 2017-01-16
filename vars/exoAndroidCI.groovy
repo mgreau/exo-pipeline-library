@@ -67,6 +67,6 @@ def call(body) {
       jiraNotification(env,currentBuild)
       
       // Clean up the workspace at the end (except in failure, and unstable cases)
-      step([$class: 'WsCleanup', cleanWhenSuccess: false, cleanWhenFailure: false, cleanWhenUnstable: false])
+      //step([$class: 'WsCleanup', cleanWhenSuccess: false, cleanWhenFailure: false, cleanWhenUnstable: false])
     }
 }
