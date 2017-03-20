@@ -1,5 +1,5 @@
 /**
-*  
+*
 */
 def call(body) {
     // evaluate the body block, and collect configuration into the object
@@ -28,7 +28,7 @@ def call(body) {
     def GIT_BRANCH = utils.getValue('gitBranch', '', config, env)
 
     // Override deployAtEnd value because of MDEPLOY-193
-    def DEPLOY_AT_END = utils.getValue('deployAtEnd', 'true', config, env) 
+    def DEPLOY_AT_END = utils.getValue('deployAtEnd', 'true', config, env)
 
     // Mail configuration
     def mailTo = "mgreau@exoplatform.com"
@@ -71,12 +71,16 @@ def call(body) {
     }
 
     stage('Send Notifications'){
+        // Log error
+        if (pipelineError != null){
+            echo "ERROR: " + pipelineError
+        }
 
       // Send notification to inform about Build status
       mailNotification(env,currentBuild, mailTo)
       // Add comment to JIRA
       jiraNotification(env,currentBuild)
-      
+
       // Clean up the workspace at the end (except in failure, and unstable cases)
       //step([$class: 'WsCleanup', cleanWhenSuccess: false, cleanWhenFailure: false, cleanWhenUnstable: false])
     }
