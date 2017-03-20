@@ -20,6 +20,7 @@ def call(body) {
     def GIT_CREDENTIALS_ID = utils.getValue('gitCredentialsId', 'ciagent', config, env)
     def DOCKER_RUN_PARAMS = utils.getValue('dockerRunParams', '', config, env)
     def JOB_NAME = env.JOB_NAME.replaceAll('/','-')
+    def BUILD_TIMEOUT = Integer.parseInt(utils.getValue('buildTimeout', 60, config, env))
 
     // required values
     def DOCKER_IMAGE = utils.getValue('dockerImage', '', config, env)
@@ -51,9 +52,11 @@ def call(body) {
       configFileProvider(
                   [configFile(fileId: "${MAVEN_SETTINGS_FILE_ID}",  targetLocation: 'settings.xml')]) {
         try {
-          eXoJDKMaven.inside("${DOCKER_RUN_PARAMS} -v ${m2Cache}:${M2_REPO_IN_CONTAINER}") {
-            sh "mvn ${MAVEN_GOALS} -P${MAVEN_PROFILES} -DdeployAtEnd=${DEPLOY_AT_END} -s settings.xml"
-          }
+            timeout(BUILD_TIMEOUT) {
+                eXoJDKMaven.inside("${DOCKER_RUN_PARAMS} -v ${m2Cache}:${M2_REPO_IN_CONTAINER}") {
+                    sh "mvn ${MAVEN_GOALS} -P${MAVEN_PROFILES} -DdeployAtEnd=${DEPLOY_AT_END} -s settings.xml"
+                }
+            }
         } catch (error) {
           currentBuild.result = 'FAILURE'
           pipelineError = error
