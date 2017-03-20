@@ -20,7 +20,7 @@ def call(body) {
     def GIT_CREDENTIALS_ID = utils.getValue('gitCredentialsId', 'ciagent', config, env)
     def DOCKER_RUN_PARAMS = utils.getValue('dockerRunParams', '', config, env)
     def JOB_NAME = env.JOB_NAME.replaceAll('/','-')
-    def BUILD_TIMEOUT = Integer.parseInt(utils.getValue('buildTimeout', 60, config, env))
+    def BUILD_TIMEOUT = Integer.parseInt(utils.getValue('buildTimeout', "60", config, env))
 
     // required values
     def DOCKER_IMAGE = utils.getValue('dockerImage', '', config, env)
